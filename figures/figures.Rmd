@@ -19,7 +19,8 @@ Your figure can include some aspect of data anlysis (eg, linear regression), but
 Please make sure to take into consideration the concepts we discussed in class with respect to color palettes and accessibility. 
 
 Load the required packages
-``` {r packages, echo= FALSE}
+
+``` {r packages, include= FALSE}
 library(FSA)
 library(FSAdata)
 ```

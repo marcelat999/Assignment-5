@@ -1,0 +1,97 @@
+---
+title: "Assignment 5"
+subtitle: "FISH 549"
+author: "Marcela Todd Zaragoza"
+date: "2023-02-17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Intructions
+
+Use  the provided dataset to begin by creating an exploratory figure you’d like about any aspect of the data, and create an expository figure that builds upon your original figure.
+
+Your figure can include some aspect of data anlysis (eg, linear regression), but there is no requirement for you to do so. You can use either base graphics or ggplot2 to complete this assignment.
+
+Please make sure to take into consideration the concepts we discussed in class with respect to color palettes and accessibility. 
+
+Load the required packages
+``` {r packages, echo= FALSE}
+library(FSA)
+library(FSAdata)
+```
+
+
+``` {r explore}
+#Getting an idea of what some of the data look like
+
+data <- SiscowetMI2004 
+str(data)
+
+#hist(data$len, col="orange", breaks=40)
+#hist(data$wgt, col="blue", breaks=20)
+
+```
+
+
+## **Exploratory** figure looking at length and weight of Siscowet Lake Trout
+```{r exploratory-fig, echo=FALSE}
+
+  plot(x=data$len,
+     y=data$wgt,
+     main= "length vs weight",
+     xlab="Length (mm)",
+     ylab="Weight (g)",
+     pch=16)
+
+```
+
+## **Expository Figure**
+I did not remove the outlier
+```{r expository, echo=TRUE}
+
+#### Remove NAs and simplify the data frame name ####
+data <- subset(x=SiscowetMI2004, 
+                   subset=!is.na(wgt) & !is.na(len))
+
+#### log-transformed data ####
+data$logL <- log(data$len)
+data$logW <- log(data$wgt)
+
+#### More data cleaning ####
+data2 <- subset(x=data,
+                    subset=logW >= -0.5)
+
+#### Look at the subsetted data ####
+#str(data2)
+
+#### Running the linear model using the log-transformed data ####
+
+lm1 <- lm(logW ~ logL, data=data2)
+
+# Model output
+# str(lm1)
+# summary(lm1)
+# confint(lm1)
+# coef(lm1)
+
+# Plot the observed data from the experiment
+plot(x=data2$logL,
+     y=data2$logW,
+     xlab="log Total Length (mm)",
+     ylab="log Total Weight (g)",
+     pch=19,
+     col="navy",
+     main="Linear Model Fit")
+
+lines(x=data2$logL,
+      y=lm1$fitted.values,
+      lwd=2,
+      col="red")
+
+#plot(lm1)
+```
+
